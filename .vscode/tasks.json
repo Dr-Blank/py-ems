@@ -1,0 +1,58 @@
+{
+  "version": "2.0.0",
+  "windows": {
+    "options": {
+      "shell": {
+        "executable": "cmd.exe",
+        "args": ["/C", ".venv\\Scripts\\activate.bat", "&"]
+      }
+    }
+  },
+  "tasks": [
+    {
+      "type": "shell",
+      "label": "activate venv",
+      "command": "${workspaceFolder}/.venv/Scripts/activate.ps1"
+    },
+    {
+      "type": "shell",
+      "label": "poetry build",
+      "command": "poetry build",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "detail": "Build the package"
+    },
+    {
+      "type": "shell",
+      "label": "pytest",
+      "command": "pytest",
+      "args": [
+        "tests"
+      ],
+      // "dependsOn": "activate venv",
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "detail": "Run the tests"
+    }
+  ]
+}
