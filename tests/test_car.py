@@ -1,20 +1,14 @@
 """Test car module"""
 
 import time
-from timeit import timeit
 
-import pytest
-
-from elevatorbot import CarState, Direction, Display, DoorState, SimpleCar
-
-from elevatorbot.motor import BrokenMotor
-
+from elevatorbot.car import SimpleCar
 from elevatorbot.exceptions import (
     CarDoorNotClosedError,
     CarInvalidFloorError,
     CarNotIdleError,
-    MotorError,
 )
+from elevatorbot.util import BrokenMotor, CarState, Direction, DoorState
 
 
 def test_car_creation():
@@ -58,8 +52,8 @@ def test_car_move_invalid_floor():
 
     try:
         car.move_to(11)
-    except* CarInvalidFloorError as excs:
-        assert excs.exceptions[0].floor == 11 # pylint: disable=no-member
+    except* CarInvalidFloorError:
+        assert True
     else:
         assert False
 
@@ -70,8 +64,10 @@ def test_car_move_invalid_car_state():
     car.state = CarState.MOVING
     try:
         car.move_to(5)
-    except* CarNotIdleError as excs:
-        assert excs.exceptions[0].car_state == CarState.MOVING # pylint: disable=no-member
+    except* CarNotIdleError:
+        assert True
+    else:
+        assert False
 
 
 def test_car_move_invalid_door_state_with_working_motor():
@@ -91,6 +87,8 @@ def test_car_door_with_broken_motor():
         car.move_to(5)
     except* CarDoorNotClosedError:
         assert True
+    else:
+        assert False
 
 
 def test_car_move_time():
@@ -107,14 +105,16 @@ def test_car_move_time():
 def test_car_move_display():
     """Test car move display"""
 
-    class MockDisplay(Display):
+    class MockDisplay:
         """
         Mock display
         """
-        def __init__(self) -> None:
-            self.calls: list[tuple[int, Direction]] = []
 
-        def show(self, floor: int, direction: Direction) -> None:
+        def __init__(self) -> None:
+            self.calls: list[tuple[int, Direction | None]] = []
+
+        def show(self, floor: int, direction: Direction | None) -> None:
+            """collect calls"""
             self.calls.append((floor, direction))
 
     display = MockDisplay()

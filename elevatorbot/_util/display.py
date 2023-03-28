@@ -1,9 +1,9 @@
 """ Display for cars to show the current floor and direction. """
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Protocol, Optional
+from typing import Any, Protocol, Optional
 
-from .states import CarState, Direction, DoorState
+from .states import Direction
 
 
 class Display(Protocol):
@@ -21,7 +21,7 @@ class ConsoleDisplay:
         Direction.DOWN: "⬇️",
     }
 
-    def show(self, floor: int, direction: Direction = None) -> None:
+    def show(self, floor: int, direction: Direction | None = None) -> None:
         """Show the current floor and direction"""
         output = f"Floor: {floor}"
         if direction:

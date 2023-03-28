@@ -1,18 +1,10 @@
 """Exceptions for the ElevatorBot package."""
 
-from .states import CarState
+from .._util.states import CarState
 
 
 class ElevatorBotException(Exception):
     """Base class for ElevatorBot exceptions."""
-
-
-class MotorError(ElevatorBotException):
-    """Exception for motor errors."""
-
-
-class MotorNotActivatedError(MotorError):
-    """Exception for motor not activated errors."""
 
 
 class CarError(ElevatorBotException):
@@ -22,17 +14,18 @@ class CarError(ElevatorBotException):
 class CarNotIdleError(CarError):
     """Exception for car not idle errors."""
 
-    def __init__(self, state: CarState) -> None:
+    def __init__(self, msg: str, state: CarState) -> None:
+        self.msg = msg
         self.car_state = state
-        super().__init__(f"Car not idle: {state}")
+        super().__init__(f"{msg}\nCar not idle, current state: {state}")
 
 
 class CarInvalidFloorError(CarError):
     """Exception for car invalid floor errors."""
 
-    def __init__(self, floor: int) -> None:
+    def __init__(self, msg: str, floor: int) -> None:
         self.floor = floor
-        super().__init__(f"Invalid floor: {floor}")
+        super().__init__(f"{msg}\nInvalid floor: {floor}")
 
 
 class CarDoorNotClosedError(CarError):

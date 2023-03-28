@@ -1,30 +1,29 @@
-"""
-Represents an elevator car.
-"""
 
+from __future__ import annotations
 import time
 
-from .display import ConsoleDisplay, Display
-from .exceptions import (
-    CarDoorNotClosedError,
-    CarInvalidFloorError,
-    CarNotIdleError,
-    MotorError,
-)
-from .motor import Motor, WorkingMotor
-from .states import CarState, Direction, DoorState
+from typing import TYPE_CHECKING
 
+from ..exceptions import (CarDoorNotClosedError, CarInvalidFloorError,
+                          CarNotIdleError, MotorError)
+from ..util import (CarState, ConsoleDisplay, Direction, Display, DoorState,
+                     Motor, WorkingMotor)
+
+if TYPE_CHECKING:
+    pass
 
 class SimpleCar:
     """A simple car class"""
+
+    state: CarState
 
     def __init__(
         self,
         car_id: int,
         num_floors: int,
         speed: float,
-        motor: Motor = None,
-        display: Display = None,
+        motor: Motor | None = None,
+        display: Display | None = None,
     ) -> None:
         self.car_id = car_id
         self.num_floors = num_floors
@@ -75,16 +74,15 @@ class SimpleCar:
         excs: list[Exception] = []
         # make sure the car is idle
         if self.state != CarState.IDLE:
-            err = CarNotIdleError(f"Car state: {self.state}")
-            err.car_state = self.state
+            err = CarNotIdleError("", self.state)
             excs.append(err)
 
         # make sure the floor is valid
         if destination_floor not in self.available_floors:
             err = CarInvalidFloorError(
-                f"Destination floor: {destination_floor}\nAvailable floors: {self.available_floors}"
+                f"Available floors: {self.available_floors}",
+                destination_floor,
             )
-            err.floor = destination_floor
 
             excs.append(err)
 

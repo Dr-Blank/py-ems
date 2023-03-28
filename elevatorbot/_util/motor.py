@@ -2,7 +2,7 @@
 
 from typing import Protocol
 
-from .exceptions import MotorNotActivatedError
+from ..exceptions.motor_exceptions import MotorNotActivatedError
 
 
 class Motor(Protocol):
