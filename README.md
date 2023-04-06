@@ -9,4 +9,4 @@ Using Design Patterns, come up with a framework to manage elevators in a buildin
 
 # Development
 
-Go to [docs/dev.md](docs/dev.md) for more details.
+Go to [docs/dev.md](docs/contributing.md) for more details.
